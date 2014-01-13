@@ -53,9 +53,17 @@ object MainSynchronizedRemoveAndAdd {
 
     countDown.await()
 
-    count += cmm.remove("1").get.size
+    val x = cmm.remove("1")
+    x match {
+      case Some(y) => count += y.size
+      case None =>
 
+    }
+
+    println("\n")
+    println("========")
     println(count)
+    println("========")
 
 
 
