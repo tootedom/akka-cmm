@@ -8,12 +8,12 @@ import scala.None
 /**
  * Created by dominictootell on 13/01/2014.
  */
-object MainSynchronizedRemoveAndAdd {
+object MainUnsynchronizedAkkaCmm {
   def main(args: Array[String]) {
     val loops = 1000
     val cmm = new ConcurrentMultiMap[String, Int](1,
       new Comparator[Int] {
-        def compare(a: Int, b: Int): Int = a compareTo b
+        def compare(a: Int, b: Int): Int = a compareTo  b
       })
 
     @volatile var count = 0
@@ -23,9 +23,7 @@ object MainSynchronizedRemoveAndAdd {
 
       def run() {
         for (i <- 1 to loops) {
-          map.synchronized {
-            map.put("1", i)
-          }
+          map.put("1", i)
         }
         countDown.countDown();
       }
@@ -35,11 +33,7 @@ object MainSynchronizedRemoveAndAdd {
 
       def run() {
         for (i <- 1 to loops) {
-          var x : Option[Iterable[Int]] = null
-          map.synchronized {
-            x = map.remove("1")
-          }
-
+          val x = map.remove("1")
           x match {
             case Some(y) => count+=y.size
             case None =>
@@ -71,6 +65,11 @@ object MainSynchronizedRemoveAndAdd {
     println("Count should be "+ loops + ":")
     println("count("+count+")")
     println("========")
+
+
+
+
+
 
     pool.shutdown()
   }
